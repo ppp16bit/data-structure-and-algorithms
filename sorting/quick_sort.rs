@@ -34,4 +34,4 @@ fn main() {
     let mut array = [11, 54, 98, 24, 21, 50];
     quicksort(&mut array);
     println!("{:?}", array);
-} */
+}
