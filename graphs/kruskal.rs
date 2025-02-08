@@ -1,31 +1,11 @@
 use std::cmp::Ordering;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 struct Edge {
-    origin: usize,
+    source: usize,
     destination: usize,
     weight: i32,
 }
-
-impl PartiaOrd for Edge {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for Edge {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.weight.cmp(&other.weight)
-    }
-}
-
-impl PartialEq for Edge {
-    fn eq(&self, other: &Self) -> bool {
-        self.weight == other.weight
-    }
-}
-
-impl Eq for Edge {}
 
 struct UnionFind {
     parent: Vec<usize>,
@@ -33,9 +13,9 @@ struct UnionFind {
 }
 
 impl UnionFind {
-    if new(size: usize) -> Self {
+    fn new(size: usize) -> Self {
         UnionFind {
-            parent: (0..usize).collect(),
+            parent: (0..size).collect(),
             rank: vec![0; size],
         }
     }
@@ -50,7 +30,7 @@ impl UnionFind {
     fn union(&mut self, x: usize, y: usize) -> bool {
         let root_x = self.find(x);
         let root_y = self.find(y);
-
+        
         if root_x == root_y {
             return false;
         }
@@ -61,7 +41,7 @@ impl UnionFind {
         };
 
         self.parent[secondary] = primary;
-
+        
         if self.rank[primary] == self.rank[secondary] {
             self.rank[primary] += 1;
         }
@@ -73,18 +53,33 @@ fn kruskal(mut edges: Vec<Edge>, num_vertices: usize) -> (Vec<Edge>, i32) {
     let mut uf = UnionFind::new(num_vertices);
     let mut mst = Vec::new();
     let mut total_weight = 0;
-    
+
     edges.sort();
 
+    // sinto fortes dores de cabeça 
     for edge in edges {
         let connected = uf.find(edge.source) == uf.find(edge.destination);
         if connected { continue; }
 
         uf.union(edge.source, edge.destination);
-        mst.push(edge);
         total_weight += edge.weight;
-    }
+        mst.push(edge);
+
     (mst, total_weight)
 }
 
-fn main() {}
+fn main() {
+    let edges = vec![
+        Edge { source: 0, destination: 1, weight: 10 },
+        Edge { source: 0, destination: 2, weight: 6 },
+        Edge { source: 0, destination: 3, weight: 5 },
+        Edge { source: 1, destination: 3, weight: 15 },
+        Edge { source: 2, destination: 3, weight: 4 },
+    ];
+
+    let (mst, total_weight) = kruskal(edges, 4);
+
+    println!("mst:");
+    mst.iter().for_each(|e| println!("{} - {}: {}", e.source, e.destination, e.weight));
+    println!("total: {}", total_weight);
+}
