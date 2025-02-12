@@ -1,4 +1,39 @@
-fn heapify(array: &mut [i32], n: usize, i: usize) {
+// paradigma imperativo
+fn heapify<T: Ord>(array: &mut [T], n: usize, i: usize) {
+    let mut largest = i;
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+
+    if left < n && array[right] > array[largest] { // se o esquerdo for maior que o node atual att o idx do maior
+        largest = left;
+    }
+
+    if right < n && array[right] > array[largest] { // se o direito for maior que o node atual att o idx do maior
+        largest = right;
+    }
+
+    if largest != i { // continua o heapfy recursivamente se o node atual nao for o maior
+        array.swap(i, largest);
+        heapify(array, n, largest);
+    }
+}
+
+fn heap<T: Ord>(array: &mut [T]) {
+    let n = array.len();
+
+    for i in (0..n /2).rev() {
+        heapify(array, n, i);
+    }
+
+    for i in (1..n).rev() {
+        array.swap(0, i);
+        heapify(array, i, 0);
+    }
+}
+
+// a complexidade continua O(n log n) porem sofre com overhead de memoria maior
+// tambem nao me livrei 100% da mutabilidade :p
+/*fn heapify(array: &mut [i32], n: usize, i: usize) {
     let (left, right) = (2 * i + 1, 2 * i + 2);
     let largest = [left, right]
         .iter()
@@ -17,13 +52,10 @@ fn heap_sort(array: &mut [i32]) {
         array.swap(0, i);
         heapify(array, i, 0);
     });
-}
+}*/
 
 fn main() {
-    let mut array = [12, 11, 13, 5, 6, 7];
-    heap_sort(&mut array);
+    let mut array = [12, 11, 13, 5, 6];
+    heap(&mut array);
     println!("{:?}", array);
 }
-
-/* tentei escrever algo mais "enxuto" e que mantesse a complexidade 
-O(n) na construção do heap e O(n log n) na ordenação */
