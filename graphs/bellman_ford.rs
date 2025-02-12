@@ -41,3 +41,21 @@ fn bellman_ford(graph: &Graph, num_vertice: usize, source: usize) -> Result<Vec<
     }
     Ok(distance)
 }
+
+fn main() {
+    let edges = vec![
+        Edge { from: 0, to: 1, weight: 4 },
+        Edge { from: 0, to: 2, weight: 2 },
+        Edge { from: 1, to: 2, weight: -3 },
+        Edge { from: 1, to: 3, weight: 2 },
+        Edge { from: 2, to: 3, weight: 3},
+    ];
+
+    let graph = Graph::new(edges);
+    let result = bellman_ford(&graph, 4, 0);
+
+    match result {
+        Ok(distance) => println!("{:?}", distance),
+        Err(error) => println!("{}", error),
+    }
+}
