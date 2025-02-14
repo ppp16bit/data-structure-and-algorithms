@@ -2,7 +2,7 @@ use std::collections::BinaryHeap;
 use std::cmp::Reverse;
 
 pub struct Graph {
-    adj_list: Vec<(usize, i32)>>,
+    adj_list: Vec<Vec<(usize, i32)>>,
 }
 
 impl Graph {
@@ -30,7 +30,7 @@ pub fn prim_mst(graph: &Graph) -> Option<(i32, Vec<(usize, usize, i32)>)> {
     let mut total_weight = 0;
 
     visited[0] = true;
-    for &(v, weight) in &graph.adj_list[0] {
+    for &(v, w) in &graph.adj_list[0] {
         heap.push(Reverse((w, 0, v)));
     }
 
@@ -62,7 +62,7 @@ mod tests {
 
     #[test]
     fn prim_mst() {
-        // case 1
+        // connected graph
         let mut graph = Graph::new(3);
         graph.add_edge(0, 1, 1);
         graph.add_edge(0, 2, 2);
@@ -72,23 +72,46 @@ mod tests {
         assert_eq!(result.0, 3);
         assert_eq!(result.1, vec![(0, 1, 1), (0, 2, 2)]);
 
-        // case 2
+        // disconnected
         let mut graph = Graph::new(4);
         graph.add_edge(0, 1, 1);
         graph.add_edge(2, 3, 2);
         assert!(prim_mst(&graph).is_none());
 
-        // case 3
+        // single node
         let graph = Graph::new(1);
         let result = prim_mst(&graph).unwrap();
         assert_eq!(result.0, 0);
         assert!(result.1.is_empty());
 
-        // case 4
+        // empty
         let graph = Graph::new(0);
         let result = prim_mst(&graph).unwrap();
         assert_eq!(result.1.is_empty());
     }
 }
 
-fn main() {}
+fn main() {
+    let mut graph = Graph::new(5);
+
+    graph.add_edge(0, 1, 2);
+    graph.add_edge(0, 3, 6);
+    graph.add_edge(1, 2, 3);
+    graph.add_edge(1, 3, 8);
+    graph.add_edge(1, 4, 5);
+    graph.add_edge(2, 4, 7);
+    graph.add_edge(3, 4, 9);
+
+    match prim_mst(&graph) {
+        Some((total_weight, mst_edges)) => {
+            println!("weight: {}", total_weight);
+            println!("edges in mst:");
+            for (u, v, w) in mst_edges {
+                println!("{} - {} (weight: {})", u, v, w);
+            }
+        }
+        None => {
+            println!("no mst exists");
+        }
+    }
+}
