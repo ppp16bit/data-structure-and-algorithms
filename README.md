@@ -1,6 +1,6 @@
 # data structure n algorithms
 
-my studies in dsa in rust and python for leedcode 
+my studies in dsa in rust and python for leetcode 
 
 # LeetCode Profile
 
