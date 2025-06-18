@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func sortColors(nums []int) {
 	red, white, blue := 0, 0, 0
 	idx := 0
@@ -32,9 +30,9 @@ func sortColors(nums []int) {
 	}
 }
 
-func main() {
+/*func main() {
 	nums := []int{2, 0, 1, 1, 0}
 
 	sortColors(nums)
 	fmt.Println(nums)
-}
+}*/
