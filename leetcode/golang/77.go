@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func combine(n int, k int) [][]int {
 	var ans [][]int
 	dfs(n, k, 1, []int{}, &ans)
@@ -27,7 +25,7 @@ func dfs(n int, k int, start int, path []int, ans *[][]int) {
 	}
 }
 
-func main() {
+/*func main() {
 	n := 4
 	k := 2
 	result := combine(n, k)
@@ -37,5 +35,4 @@ func main() {
 	k2 := 3
 	result2 := combine(n2, k2)
 	fmt.Println(result2)
-}
-
+}*/
